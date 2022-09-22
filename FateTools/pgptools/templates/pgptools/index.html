@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
+    <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+    <title>PGP Tools</title>
+</head>
+<body>
+    <h2>Hello!</h2>
+    <div id="app"></div>
+
+    <script type="text/babel">
+        
+
+        function App() {
+            const [state, setState] = React.useState({
+                response: "",
+                keysList: "",
+                getInfoButton: "Get Key Info",
+                pgpKeysVisible: false,
+                droppedFile: ""
+            });
+            function updateResponse(event) {
+                setState({
+                    ...state,
+                    response: event.target.value
+                });
+                
+            }
+
+            function listKeys() {
+                fetch('listKeys')
+                .then(response => response.json())
+                .then(keys => {
+                    
+                    //Log keys to console
+                    console.log(keys["keys_list"]);
+
+                    // do something else
+                    let keys_list = keys["keys_list"];
+                    setState({
+                        ...state,
+                        keysList: keys_list
+                    })
+                });
+            }
+
+            return(
+                <div>
+                    <input autofocus={true} onChange={updateResponse} value={state.response}/> 
+                    <button onClick={listKeys}>List Keys</button>  
+                    <div id="keysList">
+                        {state.keysList}
+                    </div>
+                </div>
+            )
+
+        }
+        ReactDOM.render(<App />, document.querySelector("#app"));
+    </script>
+</body>
+</html>

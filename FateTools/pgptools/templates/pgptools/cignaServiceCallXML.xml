@@ -1,0 +1,98 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<S:Envelope xmlns:env="http://www.w3.org/2003/05/soap-envelope"
+    xmlns:S="http://www.w3.org/2003/05/soap-envelope">
+    <S:Header>
+        <To xmlns="http://www.w3.org/2005/08/addressing">https://uat-api.benefitfocus.com/outbound/CignaMUWStatus/mups/ib1/EnrollConsumer</To>
+        <Action xmlns="http://www.w3.org/2005/08/addressing">urn:CIGNA:CGI:Pinata:ServiceEndPoint/IUniversalService/EnrollConsumer</Action>
+        <ReplyTo xmlns="http://www.w3.org/2005/08/addressing">
+            <Address>http://www.w3.org/2005/08/addressing/anonymous</Address>
+        </ReplyTo>
+        <FaultTo xmlns="http://www.w3.org/2005/08/addressing">
+            <Address>http://www.w3.org/2005/08/addressing/anonymous</Address>
+        </FaultTo>
+        <MessageID xmlns="http://www.w3.org/2005/08/addressing">uuid:9e1549e8-870b-4da5-8bed-76fab50f909c</MessageID>
+        <wsse:Security xmlns:wsse="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd">
+            <wsse:UsernameToken>
+                <wsse:Username>bnftfcs</wsse:Username>
+                <wsse:Password Type="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-username-token-profile-1.0#PasswordText">Ym5mdGZjczA0MDMyMDE4</wsse:Password>
+            </wsse:UsernameToken>
+        </wsse:Security>
+        <work:WorkContext xmlns:work="http://oracle.com/weblogic/soap/workarea/">rO0ABXdPAA93ZWJsb2dpYy5hcHAuNFgAAADWAAAAI3dlYmxvZ2ljLndvcmthcmVhLlN0cmluZ1dvcmtDb250ZXh0AA8yMjA2LnguMC5SRUwtMTEAAA==</work:WorkContext>
+    </S:Header>
+    <S:Body>
+        <ns3:EnrollConsumer xmlns:ns3="urn:CIGNA:CGI:Pinata:ServiceEndPoint"
+            xmlns:ns2="urn:CIGNA:CGI:Common:CommonTypes:2008:09"
+            xmlns="urn:CIGNA:CGI:Consumer:ExternalStructures:2010:07">
+            <ns3:request>
+                <Identifier>
+                    <SSN>826784263</SSN>
+                    <AccountKey>690479</AccountKey>
+                    <InsuredRole>EE</InsuredRole>
+                    <Vendor>ALLCALL</Vendor>
+                    <BillingLocation>0000</BillingLocation>
+                </Identifier>
+                <Demographics>
+                    <PersonName>
+                        <ns2:GivenName>Jacqueline</ns2:GivenName>
+                        <ns2:FamilyName prefix="">DanTest4263</ns2:FamilyName>
+                    </PersonName>
+                    <Gender>F</Gender>
+                    <DateOfBirth>1991-10-25</DateOfBirth>
+                </Demographics>
+                <ContactInformation>
+                    <ns2:AddressCollection collectionCount="1">
+                        <ns2:Address>
+                            <ns2:AddressType>
+                                <ns2:Code>HOME</ns2:Code>
+                            </ns2:AddressType>
+                            <ns2:Line1>25631 MADISON ST</ns2:Line1>
+                            <ns2:Line2 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:nil="true"/>
+                            <ns2:Line3 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:nil="true"/>
+                            <ns2:City>ASTATULA</ns2:City>
+                            <ns2:State>FL</ns2:State>
+                            <ns2:Zip>34705</ns2:Zip>
+                            <ns2:CountryCode>US</ns2:CountryCode>
+                        </ns2:Address>
+                    </ns2:AddressCollection>
+                    <ns2:TelephoneCollection collectionCount="1">
+                        <ns2:Telephone>
+                            <ns2:TelephoneType>
+                                <ns2:Code>HOME</ns2:Code>
+                            </ns2:TelephoneType>
+                            <ns2:Extension>7890</ns2:Extension>
+                            <ns2:PhoneNumber>(123) 456-7890</ns2:PhoneNumber>
+                        </ns2:Telephone>
+                    </ns2:TelephoneCollection>
+                </ContactInformation>
+                <EnrolledCoverageList collectionCount="2">
+                    <EnrolledCoverage>
+                        <Policy>
+                            <Symbol>VDT</Symbol>
+                            <Number>961404</Number>
+                        </Policy>
+                        <Product>STD</Product>
+                        <StartDate>2022-07-01</StartDate>
+                        <EnrollmentType>ULEVENT</EnrollmentType>
+                        <EventCode>LIFE</EventCode>
+                        <RequestedAmount>576.92</RequestedAmount>
+                        <PendingAmount>576.92</PendingAmount>
+                        <ApprovedAmount>0.00</ApprovedAmount>
+                    </EnrolledCoverage>
+                    <EnrolledCoverage>
+                        <Policy>
+                            <Symbol>FLK</Symbol>
+                            <Number>960737</Number>
+                        </Policy>
+                        <Product>LTD</Product>
+                        <StartDate>2022-07-01</StartDate>
+                        <EnrollmentType>ULEVENT</EnrollmentType>
+                        <EventCode>LIFE</EventCode>
+                        <RequestedAmount>2500.00</RequestedAmount>
+                        <PendingAmount>2500.00</PendingAmount>
+                        <ApprovedAmount>0.00</ApprovedAmount>
+                    </EnrolledCoverage>
+                </EnrolledCoverageList>
+            </ns3:request>
+        </ns3:EnrollConsumer>
+    </S:Body>
+</S:Envelope>

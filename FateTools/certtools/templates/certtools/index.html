@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
+    <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+    <title>Certificate Tool</title>
+    <style>
+        div {
+            padding: 5px;
+        }
+        #certificate {
+            border-color: gray;
+            border-style: solid;
+            border-top-width: 5px;
+            border-left-width: 5px;
+        }
+        #closeButton {
+            border-color: red;
+            color: red;
+        }
+        .droppable {
+            border-color: blueviolet;
+            border-style: dotted;
+            border-width: 5px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Certificate Tool</h1>
+    Enter in the certificate from the SAML below: 
+    <div id="app"></div>
+
+    <script type="text/babel">
+        
+
+        function App() {
+            const [state, setState] = React.useState({
+                response: "",
+                certificateObject: "",
+                getInfoButton: "Get Cert Info",
+                certVisible: false,
+                signatureInput: "",
+                droppedFile: ""
+            });
+            function updateResponse(event) {
+                setState({
+                    ...state,
+                    response: event.target.value
+                });
+                
+            }
+            function updateSignature(event) {
+                setState({
+                    ...state,
+                    signatureInput: event.target.value
+                });
+                
+            }
+
+            function closeCert() {
+                setState({
+                    ...state,
+                    certVisible: false
+                });
+            }
+
+            function downloadKey() {
+                const element = document.createElement("a");
+                const file = new Blob([state.certificateObject.publicKey], {
+                    type: "utf-8"
+                });
+                element.href = URL.createObjectURL(file);
+                element.download = "PublicKey.pub";
+                document.body.appendChild(element);
+                element.click();
+            }
+
+            function downloadCert() {
+                const element = document.createElement("a");
+                const file = new Blob([state.certificateObject.certPEM], {
+                    type: "utf-8"
+                });
+                element.href = URL.createObjectURL(file);
+                element.download = "Cert.crt";
+                document.body.appendChild(element);
+                element.click();
+            }
+
+            function getCertInfo() {
+                setState({
+                    ...state,
+                    certVisible: false
+                });
+                fetch('certInfo', {
+                    method: 'POST',
+                    body: JSON.stringify({
+                        certString: state.response
+                    })
+                })
+                .then(response => response.json())
+                .then(cert => {
+                    // Print the cert json object
+                    console.log(cert);
+
+                    //Do something with the cert object
+                    setState({
+                        ...state,
+                        certificateObject: cert,
+                        certVisible: true
+                    });
+                    console.log(state)
+                });
+            }
+
+            function verifySig() {
+                fetch('checkSignature', {
+                    method: 'POST',
+                    body: JSON.stringify({
+                        signatureInput: state.signatureInput,
+                        certPEM: state.certificateObject.certPEM
+                    })
+                });
+            }
+            function dropCert(event) {
+                event.preventDefault();
+                event.target.classList.remove('droppable');
+                const file = event.dataTransfer.files[0];
+                file.text()
+                .then(file => {
+                    
+                    setState({
+                        ...state,
+                        response: file
+                    });
+                });
+                
+                
+            }
+
+            function toggleDroppable(event) {
+                if (event.target.className === 'droppable') {
+                    event.target.classList.remove('droppable');
+                } else {
+                    event.target.classList.add('droppable');
+                }
+            }
+
+            if (state.certVisible === false ){
+                return (
+                    <div>
+                        <input autofocus={true} onChange={updateResponse} value={state.response} onDragEnter={toggleDroppable} onDragLeave={toggleDroppable} onDrop={dropCert}/>
+                        <div><button onClick={getCertInfo}>{state.getInfoButton}</button></div>
+                        
+                    </div>
+                )
+           } else {
+                return (
+                    <div>
+                        <input autofocus={true} onChange={updateResponse} value={state.response} onDragEnter={toggleDroppable} onDragLeave={toggleDroppable} onDrop={dropCert}/>
+                        <div><button onClick={getCertInfo}>{state.getInfoButton}</button></div>
+                        
+                        <div id="certificate">
+                            <div><button id="closeButton" onClick={closeCert}>x</button></div>
+                            <div ><b>Subject: </b>{state.certificateObject.subject}</div>
+                            <div id="fingerprints"><b>Fingerprint:</b>
+                                <ul>
+                                <li><b>SHA1: </b>{state.certificateObject.fingerprint.SHA1}</li>  
+                                <li><b>SHA256: </b>{state.certificateObject.fingerprint.SHA256}</li>
+                                </ul>
+                            </div>
+                            <div><b>Serial: </b>{state.certificateObject.serial}</div>
+                            <div><b>Not Before: </b>{state.certificateObject.notBefore}</div>
+                            <div><b>Not NotAfter: </b>{state.certificateObject.notAfter}</div>    
+                            <div id="certActions">
+                                <div><button onClick={downloadCert}>Download PEM Cert</button></div>
+                                <div><button onClick={downloadKey}>Download Public Key</button></div>
+                            </div>
+                            <div id="checkSig">
+                                <h3>Check Signature</h3>
+                                <div><input onChange={updateSignature} value={state.signatureInput}/></div> 
+                                <div><button onClick={verifySig}>Verify</button></div>   
+                            </div>
+                        </div>
+                        
+
+                    </div>
+                )
+           }
+
+            
+        }
+        
+        ReactDOM.render(<App />, document.querySelector("#app"));
+        
+    </script>
+
+    
+</body>
+</html>
